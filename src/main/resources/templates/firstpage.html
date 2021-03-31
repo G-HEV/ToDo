@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ToDos</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+</head>
+<body>
+
+ <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+     <a class="navbar-brand" href="#">ToDo</a>
+     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+         <span class="navbar-toggler-icon"></span>
+     </button>
+     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+         <div class="navbar-nav">
+             <a class="nav-link active" href="#" th:href="@{/TodoList}">All Tasks</a>
+             <a class="nav-link" href="#" th:href="@{/TodoList/home}" >Home</a>
+             <a class="nav-link" href="#" th:href="@{/TodoList/life}" >Life</a>
+             <a class="nav-link" href="#" th:href="@{/TodoList/work}" >Work</a>
+             <a class="nav-link" href="#" th:href="@{/TodoList/shop}" >Shop</a>
+             <a class="nav-link" href="#" th:href="@{/TodoList/addCategory}" >+</a>
+         </div>
+     </div>
+ </nav>
+
+ <div class="container">
+     <div class="3 offset 3">
+     <div class="p-4">
+         <form action="#" th:action="@{/TodoList/addTask}">
+         <button type="submit"  class="btn btn-outline-default waves-effect float-right">
+         <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" style="color: green" fill="currentColor"
+              class="bi bi-plus float-right" viewBox="0 0 16 16">
+             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+         </svg>
+         Add Task
+    </button>
+         </form>
+     </div>
+     </div>
+     </div>
+ </div>
+<div class="container" th:each="task : ${tasks}">
+<div class="column-md-6 p-2">
+<table class="table">
+    <tr>
+
+        <td>
+            <form action="#" th:action="@{'/TodoList/{id}'(id=${task.id})}">
+            <button type="submit" class="btn btn-transparent float-left" th:text="${task.description}">
+                Non
+            </button>
+            </form>
+        </td>
+
+        <td>
+            <form class="float-right" action="#" th:action="@{'/TodoList/{id}/done'(id=${task.id})}">
+                <button type="submit" class="btn btn-outline-warning">
+                    Done
+                </button>
+            </form>
+        </td>
+
+        <td>
+         <form class="float-right" action="#" th:action="@{'/TodoList/delete/{id}' (id=${task.id})}" th:method="delete">
+             <button type="submit" class="btn btn-outline-danger">
+             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                 <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+             </svg>
+             </button>
+         </form>
+        </td>
+    </tr>
+    </table>
+</div>
+</div>
+</body>
+</html>
