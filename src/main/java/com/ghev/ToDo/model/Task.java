@@ -26,20 +26,25 @@ public class Task {
     @JoinColumn(name="id_type_task")
     private TaskType task_Type;
 
+    private String title;
+
     private String description;
 
-    private LocalDate date;
+    private LocalDate date=LocalDate.now();
 
     private boolean done = false;
 
     public Task() {
     }
 
-    public Task(TaskType task_Type, String description,LocalDate date) {
+
+
+    public Task(TaskType task_Type, String description, LocalDate date,String title) {
 
         this.task_Type = task_Type;
         this.description = description;
         this.date=date;
+        this.title=title;
 
     }
 }

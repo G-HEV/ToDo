@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
           integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
@@ -8,5 +8,47 @@
 </head>
 <body>
 
+<div class="container" >
+    <h1 style="centre" >Add Task</h1>
+    <form action="#" th:method="POST">
+        <table class="table">
+        <tr>
+            <th scope="row">Category: </th>
+
+            <td>
+                <select class="form-select" aria-label="Default select example">
+                    <option value="">-- Select category --</option>
+                    <option th:each="tasktype : ${taskType}" th:text="${tasktype.typeTask}" th:value="${tasktype.id_type}">
+                        Non
+                    </option>
+                </select>
+            </td>
+
+        </tr>
+
+        <div th:object="${newTask}">
+
+        <tr>
+            <th scope="row">Title: </th>
+
+            <td>
+                <textarea cols="50" rows="4" th:field="*{title}"></textarea>
+            </td>
+        </tr>
+
+            <tr>
+                <th scope="row">Description: </th>
+                <td>
+                    <textarea cols="50" rows="4" th:field="*{description}"></textarea>
+                </td>
+            </tr>
+
+    </div>
+        </table>
+        <button type="submit" class="btn btn-success" >Submit</button>
+    </form>
+        <button type="button" class="btn btn-secondary" onclick="history.back();">Back</button>
+
+</div>
 </body>
 </html>

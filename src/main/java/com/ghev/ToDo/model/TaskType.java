@@ -4,6 +4,7 @@ package com.ghev.ToDo.model;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.Cascade;
 
 
 import javax.persistence.*;
@@ -20,7 +21,7 @@ public class TaskType {
     private Integer id_type;
 
 
-    @OneToMany(mappedBy = "task_Type")
+    @OneToMany(mappedBy = "task_Type",cascade = CascadeType.ALL)
     private Set<Task> task;
 
     @Column(name = "TYPETASK")

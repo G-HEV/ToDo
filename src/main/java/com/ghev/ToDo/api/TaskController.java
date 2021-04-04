@@ -2,7 +2,9 @@ package com.ghev.ToDo.api;
 
 
 import com.ghev.ToDo.model.Task;
+import com.ghev.ToDo.model.TaskType;
 import com.ghev.ToDo.service.TaskService;
+import com.ghev.ToDo.service.TaskTypeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,26 +13,32 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
 @Slf4j
 @RequestMapping("/TodoList")
-public class TaskController {
+public class TaskController{
 
     private final TaskService taskService;
+    private final TaskTypeService taskTypeService;
 
     @Autowired
-    public TaskController(TaskService taskService) {
+    public TaskController(TaskService taskService, TaskTypeService taskTypeService) {
         this.taskService = taskService;
+        this.taskTypeService = taskTypeService;
     }
 
-/*
-Get list Task
- */
+    /*
+    Get list Task
+     */
     @GetMapping
     public String getListTasks(Model model){
+
+
 
         List<Task> tasklist = taskService.getAllTasks()
                 .stream()
@@ -41,13 +49,15 @@ Get list Task
 
         model.addAttribute("tasks",tasklist);
 
+        model.addAttribute("types", taskTypeService.getTypeTask());
+
         return "firstpage";
     }
     /*
         Get task
      */
     @GetMapping("/{id}")
-    public String getTask(Model model,@PathVariable Integer id){
+    public String getTaskbyId(Model model,@PathVariable Integer id){
 
         log.info("task: ={}",taskService.getTaskbyId(id).get());
         model.addAttribute("task",taskService.getTaskbyId(id).get());
@@ -71,7 +81,11 @@ Get list Task
     Add Task
  */
     @GetMapping("/addTask")
-    public String getAddTask(@ModelAttribute("newTask") Task newTask){
+    public String getAddTask(@ModelAttribute("newTask") Task newTask, Model model){
+
+        model.addAttribute("taskType",taskTypeService.getTypeTask());
+
+        log.info("Type task: ={}",taskTypeService.getTypeTask());
 
         return "addTask";
     }
@@ -108,7 +122,7 @@ Get list Task
 
         Task task = taskService.getTaskbyId(id).get();
 
-        log.info("edit task: ={}",task);
+        log.info("edit task: {}",task);
 
         model.addAttribute("task",task);
 
@@ -125,14 +139,55 @@ Get list Task
                 .filter(task -> task.isDone())
                 .collect(Collectors.toList());
 
-        log.info("done tasksList = {}",doneList);
+        log.info("done tasksList: {}",doneList);
         model.addAttribute("doneTask",doneList);
 
 
         return "completeListTask";
 
     }
+    /*
+    Create new type Task
 
+     */
+
+    @GetMapping("/new_type")
+    public String getNewType(@ModelAttribute("type") TaskType taskType){
+
+
+        return "newType";
+    }
+
+    @PostMapping("/new_type")
+    public String postNewType(@ModelAttribute("type") TaskType taskType){
+
+      taskTypeService.addTypeTask(taskType);
+
+        return "firstpage" ;
+
+    }
+
+    /*
+
+    Primary Category
+
+     */
+
+
+    @GetMapping("/life")
+    public String getLifeCategory(Model model){
+
+        List<Task> listTaskLife = taskService.getAllTasks()
+                .stream()
+                .filter(task -> task.getTask_Type().getTypeTask().equals("life"))
+                .collect(Collectors.toList());
+
+        model.addAttribute("life",listTaskLife);
+        model.addAttribute("types",taskTypeService.getTypeTask());
+
+
+        return "firstpage";
+    }
 
 
 }

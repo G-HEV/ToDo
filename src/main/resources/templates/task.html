@@ -1,10 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+          integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <meta charset="UTF-8">
-    <title>task</title>
+    <title>Task</title>
+
 </head>
 <body>
+<div class="container p-4   " th:object="${task}">
+    <div class="table">
+       <tr>
+           <th scope="row">Title: </th>
+           <td>
+               <strong th:text="*{title}"></strong>
+           </td>
+       </tr>
+        <tr>
+            <th scope="row">Description: </th>
+           <td>
+               <p th:text="*{description}"></p>
+           </td>
+        </tr>
+        <tr>
+            <th scope="row">Date: </th>
+            <td>
+                <p th:text="*{date}"></p>
+            </td>
+        </tr>
+    </div>
+    <button type="button" class="btn btn-secondary"  onclick="history.back();">Back</button>
 
+</div>
 </body>
 </html>

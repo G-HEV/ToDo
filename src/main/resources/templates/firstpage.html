@@ -16,18 +16,25 @@
      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
          <div class="navbar-nav">
              <a class="nav-link active" href="#" th:href="@{/TodoList}">All Tasks</a>
-             <a class="nav-link" href="#" th:href="@{/TodoList/home}" >Home</a>
-             <a class="nav-link" href="#" th:href="@{/TodoList/life}" >Life</a>
-             <a class="nav-link" href="#" th:href="@{/TodoList/work}" >Work</a>
-             <a class="nav-link" href="#" th:href="@{/TodoList/shop}" >Shop</a>
-             <a class="nav-link" href="#" th:href="@{/TodoList/addCategory}" >+</a>
+             <div th:each="type : ${types}">
+             <a class="nav-link" href="#" th:href="@{'/TodoList/{typeTask}'(typeTask=${type.typeTask})}"  th:text="*{type.typeTask}"></a>
+             </div>
+             <a class="nav-link" href="#" th:href="@{/TodoList/new_type}" >+</a>
          </div>
      </div>
  </nav>
 
  <div class="container">
-     <div class="3 offset 3">
      <div class="p-4">
+         <select class="form-select form-select-sm" aria-label=".form-select-sm example" onchange="location = this.value;">
+             <option selected value="TodoList">Active tasks</option>
+             <option  value="TodoList/completed">Completed task</option>
+         </select>
+     </div>
+     <div class="3 offset 3">
+
+     <div class="p-4">
+
          <form action="#" th:action="@{/TodoList/addTask}">
          <button type="submit"  class="btn btn-outline-default waves-effect float-right">
          <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" style="color: green" fill="currentColor"
@@ -36,9 +43,13 @@
          </svg>
          Add Task
     </button>
+
          </form>
+
      </div>
+
      </div>
+
      </div>
  </div>
 <div class="container" th:each="task : ${tasks}">
@@ -48,7 +59,7 @@
 
         <td>
             <form action="#" th:action="@{'/TodoList/{id}'(id=${task.id})}">
-            <button type="submit" class="btn btn-transparent float-left" th:text="${task.description}">
+            <button type="submit" class="btn btn-transparent float-left" th:text="${task.title}">
                 Non
             </button>
             </form>
