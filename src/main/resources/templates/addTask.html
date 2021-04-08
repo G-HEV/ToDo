@@ -8,15 +8,15 @@
 </head>
 <body>
 
-<div class="container" >
+<div class="container" th:object="${newTask}">
     <h1 style="centre" >Add Task</h1>
-    <form action="#" th:method="POST">
+    <form  th:method="POST">
         <table class="table">
         <tr>
             <th scope="row">Category: </th>
 
             <td>
-                <select class="form-select" aria-label="Default select example">
+                <select class="form-select" aria-label="Default select example" th:field="*{task_Type}">
                     <option value="">-- Select category --</option>
                     <option th:each="tasktype : ${taskType}" th:text="${tasktype.typeTask}" th:value="${tasktype.id_type}">
                         Non
@@ -26,7 +26,6 @@
 
         </tr>
 
-        <div th:object="${newTask}">
 
         <tr>
             <th scope="row">Title: </th>
@@ -43,7 +42,6 @@
                 </td>
             </tr>
 
-    </div>
         </table>
         <button type="submit" class="btn btn-success" >Submit</button>
     </form>

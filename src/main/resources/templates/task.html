@@ -8,12 +8,14 @@
 
 </head>
 <body>
-<div class="container p-4   " th:object="${task}">
-    <div class="table">
+
+<div class="container p-4" th:object="${task}">
+
+    <table class="table">
        <tr>
            <th scope="row">Title: </th>
            <td>
-               <strong th:text="*{title}"></strong>
+               <p th:text="*{title}"></p>
            </td>
        </tr>
         <tr>
@@ -28,7 +30,7 @@
                 <p th:text="*{date}"></p>
             </td>
         </tr>
-    </div>
+    </table>
     <button type="button" class="btn btn-secondary"  onclick="history.back();">Back</button>
 
 </div>

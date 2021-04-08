@@ -15,22 +15,21 @@
      </button>
      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
          <div class="navbar-nav">
-             <a class="nav-link active" href="#" th:href="@{/TodoList}">All Tasks</a>
+             <a class="nav-link active" href="#" th:href="@{/TodoList}">All Active Tasks</a>
+             <a class="nav-link active" href="#" th:href="@{/TodoList/completed}">Completed task</a>
              <div th:each="type : ${types}">
              <a class="nav-link" href="#" th:href="@{'/TodoList/{typeTask}'(typeTask=${type.typeTask})}"  th:text="*{type.typeTask}"></a>
              </div>
              <a class="nav-link" href="#" th:href="@{/TodoList/new_type}" >+</a>
+             <form class="form-inline my-2 my-lg-0">
+                 <a class="nav-link" href="#" th:href="@{/logout}">Log out</a>
+             </form>
          </div>
      </div>
  </nav>
 
  <div class="container">
-     <div class="p-4">
-         <select class="form-select form-select-sm" aria-label=".form-select-sm example" onchange="location = this.value;">
-             <option selected value="TodoList">Active tasks</option>
-             <option  value="TodoList/completed">Completed task</option>
-         </select>
-     </div>
+
      <div class="3 offset 3">
 
      <div class="p-4">
@@ -58,7 +57,7 @@
     <tr>
 
         <td>
-            <form action="#" th:action="@{'/TodoList/{id}'(id=${task.id})}">
+            <form action="#" th:action="@{'/TodoList/{types}/{id}'(types= ${task.getTask_Type().getTypeTask()}, id= ${task.id})}">
             <button type="submit" class="btn btn-transparent float-left" th:text="${task.title}">
                 Non
             </button>
@@ -66,7 +65,7 @@
         </td>
 
         <td>
-            <form class="float-right" action="#" th:action="@{'/TodoList/{id}/done'(id=${task.id})}">
+            <form class="float-right" action="#" th:action="@{'/TodoList/{id}/done'(id=${task.id})}" th:method="PUT">
                 <button type="submit" class="btn btn-outline-warning">
                     Done
                 </button>
@@ -74,7 +73,7 @@
         </td>
 
         <td>
-         <form class="float-right" action="#" th:action="@{'/TodoList/delete/{id}' (id=${task.id})}" th:method="delete">
+         <form class="float-right" action="#" th:action="@{'/TodoList/delete/{types}/{id}'(types= ${task.getTask_Type().getTypeTask()}, id= ${task.id})}" th:method="delete">
              <button type="submit" class="btn btn-outline-danger">
              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>

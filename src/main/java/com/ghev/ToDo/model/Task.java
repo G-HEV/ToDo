@@ -2,6 +2,7 @@ package com.ghev.ToDo.model;
 
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -21,8 +22,8 @@ public class Task {
     private Integer id;
 
 
-
-    @ManyToOne(cascade = CascadeType.ALL)
+    @NonNull
+    @ManyToOne(cascade = CascadeType.DETACH)
     @JoinColumn(name="id_type_task")
     private TaskType task_Type;
 
