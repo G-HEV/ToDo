@@ -2,9 +2,11 @@ package com.ghev.ToDo.sec;
 
 
 import com.ghev.ToDo.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 import java.util.Arrays;
@@ -20,6 +22,9 @@ public class MyUserDetails implements UserDetails {
     private List<GrantedAuthority> authorities;
     private boolean active;
 
+
+
+    @Autowired
     public MyUserDetails(User user) {
         this.password =user.getPassword();
         this.username = user.getUsername();

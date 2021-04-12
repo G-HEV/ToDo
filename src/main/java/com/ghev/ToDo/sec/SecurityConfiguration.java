@@ -17,10 +17,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+
+@EnableWebSecurity
 @Configuration
-@Order(1)
-public class ApiSecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
     public UserDetailsService userDetailsService;
@@ -28,29 +30,29 @@ public class ApiSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
-        auth.userDetailsService(userDetailsService);
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
-    @Bean
-    public PasswordEncoder getPasswordEncoder(){
-
-        return NoOpPasswordEncoder.getInstance();
-    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .antMatcher("/TodoList/**")
-                .httpBasic()
-                .and()
+                .csrf().disable()
                 .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/TodoList")
+                .defaultSuccessUrl("/TodoList",true)
                 .and()
-                .csrf().disable()
+                .logout().logoutSuccessUrl("/")
+                .and()
                 .authorizeRequests()
+                .antMatchers("/login","/register","/","/console/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/register").permitAll()
                 .anyRequest().authenticated();
     }
 
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
 
 }

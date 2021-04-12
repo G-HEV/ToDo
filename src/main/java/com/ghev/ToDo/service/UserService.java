@@ -5,6 +5,8 @@ import com.ghev.ToDo.exception.UsernameAlreadyExist;
 import com.ghev.ToDo.model.User;
 import com.ghev.ToDo.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,9 +18,11 @@ public class UserService {
 
     public final UserRepo userRepo;
 
+
     @Autowired
-    public UserService(UserRepo userRepo) {
+    public UserService(UserRepo userRepo, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
+
     }
 
     public Optional<User> getUserById(int id){
@@ -35,6 +39,8 @@ public class UserService {
     if(checkIfUserExist(user.getUsername())){
         throw new UsernameAlreadyExist();
     }
+
+    user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         return userRepo.save(user);
     }
 

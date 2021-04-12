@@ -26,7 +26,7 @@
         <div class = "col-md-6 offset-md-3">
 
             <h1 align="center"> User Login Page </h1>
-            <form th:action="@{/login}" method="post">
+            <form th:action="@{/login}" th:method="POST">
 
                 <!-- error message -->
                 <div th:if="${param.error}">
