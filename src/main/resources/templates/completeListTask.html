@@ -13,49 +13,49 @@
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
             <a class="nav-link active" href="#" th:href="@{/TodoList}">All Active Tasks</a>
-                </li>
-                <li class="nav-item">
+        </li>
+        <li class="nav-item">
             <a class="nav-link active" href="#" th:href="@{/TodoList/completed}">Completed task</a>
-                </li>
-
-            <div th:each="type : ${types}">
-                <li class="nav-item">
-                <a class="nav-link" href="#" th:href="@{'/TodoList/{typeTask}'(typeTask=${type.typeTask})}"  th:text="*{type.typeTask}"></a>
-                </li>
-            </div>
-                <li class="nav-item">
+        </li>
+        <li class="nav-item" th:each="type : ${types}">
+            <a class="nav-link" href="#" th:href="@{'/TodoList/{typeTask}'(typeTask=${type.typeTask})}"  th:text="*{type.typeTask}"></a>
+        </li>
+        <li>
             <a class="nav-link" href="#" th:href="@{/TodoList/new_type}" >+</a>
-                </li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0">
-                <a class="nav-link" href="#" th:href="@{/logout}">Log out</a>
-            </form>
-        </div>
-    </div>
+        </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="#" th:href="@{/TodoList/category}">-</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#" th:href="@{/logout}">Log out</a>
+        </li>
+    </ul>
+
 </nav>
 <div class="row-2">
     <h1 align="center">Completed</h1>
 </div>
 
-<div class="container" th:each="task : ${doneTask}">
-
-    <div class="column-md-6 p-2">
-    <table class="table">
-
-            <tr th:text="${task.getTitle()}"></tr>
+<div class="container">
+    <table class="table table-hover">
+        <thead>
+        <th scope="col">Title</th>
+        <th scope="col">Category</th>
+        <th scope="col">Description</th>
+        </thead>
+        <tbody th:each="task : ${doneTask}">
         <tr>
-            <th scope="row">Category: </th>
+            <td th:text="${task.getTitle()}"></td>
             <td th:text="${task.getTask_Type().getTypeTask()}"></td>
-        </tr>
-        <tr>
-            <th scope="row">Description: </th>
             <td th:text="${task.getDescription()}"></td>
+
         </tr>
+        </tbody>
     </table>
 
     </div>

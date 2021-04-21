@@ -11,13 +11,13 @@
 <div class="container" th:object="${newTask}">
     <h1 style="centre" >Add Task</h1>
     <form  th:method="POST">
-        <table class="table">
+        <table class="table table-hover">
         <tr>
             <th scope="row">Category: </th>
 
             <td>
-                <select class="form-select" aria-label="Default select example" th:field="*{task_Type}">
-                    <option value="">-- Select category --</option>
+                <select class="form-select" aria-label="Default select example" th:field="*{task_Type}" required>
+                    <option value="" selected disabled>-- Select category --</option>
                     <option th:each="tasktype : ${taskType}" th:text="${tasktype.typeTask}" th:value="${tasktype.id_type}">
                         Non
                     </option>
@@ -31,14 +31,14 @@
             <th scope="row">Title: </th>
 
             <td>
-                <textarea cols="50" rows="4" th:field="*{title}"></textarea>
+                <textarea cols="50" rows="4" th:field="*{title}" required></textarea>
             </td>
         </tr>
 
             <tr>
                 <th scope="row">Description: </th>
                 <td>
-                    <textarea cols="50" rows="4" th:field="*{description}"></textarea>
+                    <textarea cols="50" rows="4" th:field="*{description}" required></textarea>
                 </td>
             </tr>
 

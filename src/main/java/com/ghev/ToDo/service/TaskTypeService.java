@@ -21,7 +21,7 @@ public class TaskTypeService {
     }
 
 
-  public   List<TaskType>  getTypeTask(){
+  public   List<TaskType> getAllTypeTask(){
 
          return taskTypeRepo.findAll();
     }

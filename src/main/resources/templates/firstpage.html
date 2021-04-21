@@ -13,19 +13,29 @@
      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
          <span class="navbar-toggler-icon"></span>
      </button>
-     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-         <div class="navbar-nav">
+     <ul class="navbar-nav mr-auto">
+         <li class="nav-item">
              <a class="nav-link active" href="#" th:href="@{/TodoList}">All Active Tasks</a>
+         </li>
+         <li class="nav-item">
              <a class="nav-link active" href="#" th:href="@{/TodoList/completed}">Completed task</a>
-             <div th:each="type : ${types}">
+         </li>
+         <li class="nav-item" th:each="type : ${types}">
              <a class="nav-link" href="#" th:href="@{'/TodoList/{typeTask}'(typeTask=${type.typeTask})}"  th:text="*{type.typeTask}"></a>
-             </div>
+         </li>
+         <li>
              <a class="nav-link" href="#" th:href="@{/TodoList/new_type}" >+</a>
-             <form class="form-inline my-2 my-lg-0">
+         </li>
+     </ul>
+     <ul class="navbar-nav ml-auto">
+         <li class="nav-item">
+             <a class="nav-link" href="#" th:href="@{/TodoList/category}">-</a>
+         </li>
+                 <li class="nav-item">
                  <a class="nav-link" href="#" th:href="@{/logout}">Log out</a>
-             </form>
-         </div>
-     </div>
+                 </li>
+     </ul>
+
  </nav>
 
  <div class="container">
@@ -53,7 +63,9 @@
  </div>
 <div class="container" th:each="task : ${tasks}">
 <div class="column-md-6 p-2">
-<table class="table">
+<table class="table table-hover">
+
+    <tbody>
     <tr>
 
         <td>
@@ -65,24 +77,23 @@
         </td>
 
         <td>
+            <form class="float-right" action="#" th:action="@{'/TodoList/delete/{types}/{id}'(types= ${task.getTask_Type().getTypeTask()}, id= ${task.id})}" th:method="delete">
+                <button type="submit" class="btn btn-outline-danger">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                        <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                        <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                    </svg>
+                </button>
+            </form>
+
             <form class="float-right" action="#" th:action="@{'/TodoList/{id}/done'(id=${task.id})}" th:method="PUT">
                 <button type="submit" class="btn btn-outline-warning">
                     Done
                 </button>
             </form>
         </td>
-
-        <td>
-         <form class="float-right" action="#" th:action="@{'/TodoList/delete/{types}/{id}'(types= ${task.getTask_Type().getTypeTask()}, id= ${task.id})}" th:method="delete">
-             <button type="submit" class="btn btn-outline-danger">
-             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-                 <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-             </svg>
-             </button>
-         </form>
-        </td>
     </tr>
+    </tbody>
     </table>
 </div>
 </div>

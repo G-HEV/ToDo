@@ -16,22 +16,17 @@
     <form action="#" class="form-control"  th:method="POST">
     <div class="col-6 p-4" th:object="${type}">
     <tr>
-
         <th scope="row">Category name: </th>
         <td>
         <textarea class="20" row="1"  th:field="*{typeTask}"></textarea>
         </td>
     </tr>
-    </table>
+
         <button type="submit" class="btn btn-success float-right">Submit</button>
-    <button type="button" onclick="history.back()" class="btn btn-secondary float-right">Back</button>
     </div>
     </form>
-
+    </table>
+    <button type="button" onclick="history.back()" class="btn btn-secondary float-right">Back</button>
 </div>
-
-
-
-
 </body>
 </html>

@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +35,7 @@ public class UserService {
         return userRepo.findAll();
     }
 
-    public User addUser(User user) throws UsernameAlreadyExist {
+    public User addUser(User user) throws UsernameAlreadyExist, SQLException {
 
     if(checkIfUserExist(user.getUsername())){
         throw new UsernameAlreadyExist();

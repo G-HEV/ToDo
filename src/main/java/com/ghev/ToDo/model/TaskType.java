@@ -21,7 +21,7 @@ public class TaskType {
     private Integer id_type;
 
 
-    @OneToMany(mappedBy = "task_Type",cascade = CascadeType.DETACH)
+    @OneToMany(mappedBy = "task_Type",cascade = CascadeType.ALL)
     private Set<Task> task;
 
     @Column(name = "TYPETASK")

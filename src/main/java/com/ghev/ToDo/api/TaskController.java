@@ -51,7 +51,7 @@ public class TaskController{
 
         model.addAttribute("tasks",tasklist);
 
-        model.addAttribute("types", taskTypeService.getTypeTask());
+        model.addAttribute("types", taskTypeService.getAllTypeTask());
 
         return "firstpage";
     }
@@ -87,8 +87,8 @@ public class TaskController{
     @GetMapping("/addTask")
     public String getAddTask(@ModelAttribute("newTask") Task newTask, Model model){
 
-        model.addAttribute("taskType",taskTypeService.getTypeTask());
-        log.info("Type task: {}",taskTypeService.getTypeTask());
+        model.addAttribute("taskType",taskTypeService.getAllTypeTask());
+        log.info("Type task: {}",taskTypeService.getAllTypeTask());
 
 
 
@@ -133,7 +133,7 @@ public class TaskController{
             .collect(Collectors.toList());
 
         model.addAttribute("doneTask",taskList);
-        model.addAttribute("types",taskTypeService.getTypeTask());
+        model.addAttribute("types",taskTypeService.getAllTypeTask());
 
         return "completeListTask";
 
@@ -179,7 +179,7 @@ public class TaskController{
                 .collect(Collectors.toList());
         log.info("List tasks other Category: {}",listTaskCategory);
         model.addAttribute("tasks",listTaskCategory);
-        model.addAttribute("types",taskTypeService.getTypeTask());
+        model.addAttribute("types",taskTypeService.getAllTypeTask());
 
 
         return "firstpage";
@@ -199,6 +199,23 @@ public class TaskController{
 
 
             return "redirect:" + referer;
+        }
+
+        /*
+
+        Delete Category handling page
+         */
+        @GetMapping("/category")
+    public String getListCategory(Model model){
+
+            model.addAttribute("categories", taskTypeService.getAllTypeTask());
+            return "category";
+        }
+        @DeleteMapping("category/{id}")
+    public String deleteCategory(@PathVariable("id") int id){
+
+            taskTypeService.deleteTypeTaskById(id);
+            return "redirect:/TodoList/category";
         }
 
 

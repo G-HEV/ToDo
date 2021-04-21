@@ -54,12 +54,12 @@ public class HomeController {
     public String postRegister(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,Model model){
 
         if(bindingResult.hasErrors()){
-            model.addAttribute("registrationForm",user);
+            model.addAttribute("reginstratioForm",user);
             return "register";
         }
         try {
             userService.addUser(user);
-        }catch(UsernameAlreadyExist e){
+        }catch(Exception e){
             bindingResult.rejectValue("username","user.username","Username already exist");
             model.addAttribute("registrationForm",user);
             return "register";
