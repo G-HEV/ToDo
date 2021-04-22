@@ -13,7 +13,6 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Setter
-@ToString
 public class Task {
 
 
@@ -34,6 +33,12 @@ public class Task {
     private LocalDate date=LocalDate.now();
 
     private boolean done = false;
+
+    @NonNull
+    @ManyToOne
+    @JoinColumn(name = "id_user")
+    private User user;
+
 
     public Task() {
     }

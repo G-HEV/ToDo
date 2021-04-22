@@ -5,34 +5,40 @@ import com.ghev.ToDo.model.Task;
 import com.ghev.ToDo.model.TaskType;
 import com.ghev.ToDo.service.TaskService;
 import com.ghev.ToDo.service.TaskTypeService;
+import com.ghev.ToDo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Controller
 @Slf4j
+@Secured("ROLE_USER")
 @RequestMapping("/TodoList")
 public class TaskController{
 
     private final TaskService taskService;
     private final TaskTypeService taskTypeService;
-
-
+    private final UserService userService;
 
     @Autowired
-    public TaskController(TaskService taskService, TaskTypeService taskTypeService) {
+    public TaskController(TaskService taskService, TaskTypeService taskTypeService, UserService userService) {
         this.taskService = taskService;
         this.taskTypeService = taskTypeService;
+        this.userService = userService;
     }
+
 
     /*
     Get list Task
@@ -45,13 +51,19 @@ public class TaskController{
         List<Task> tasklist = taskService.getAllTasks()
                 .stream()
                 .filter(task -> task.isDone()==false)
+                .filter(username -> username.getUser().getUsername().equals(userUsername()))
                 .collect(Collectors.toList());
 
         log.info("Task List = {}",tasklist);
 
         model.addAttribute("tasks",tasklist);
 
-        model.addAttribute("types", taskTypeService.getAllTypeTask());
+        model.addAttribute("types",
+                taskTypeService.getAllTypeTask()
+                        .stream()
+                        .filter(username -> username.getUser().getUsername().equals(userUsername()))
+                        .collect(Collectors.toList())
+        );
 
         return "firstpage";
     }
@@ -59,7 +71,7 @@ public class TaskController{
         Get task
      */
     @GetMapping("/{type}/{id}")
-    public String getTaskbyId(Model model,@PathVariable("type") String type ,@PathVariable("id") Integer id){
+    public String getTaskById(Model model,@PathVariable("type") String type ,@PathVariable("id") Integer id){
 
         log.info("task: {}",taskService.getTaskbyId(id).get());
         model.addAttribute("task",taskService.getTaskbyId(id).get());
@@ -98,12 +110,15 @@ public class TaskController{
     @PostMapping("/addTask")
     public String addTask(@ModelAttribute("newTask") @Valid Task newTask, BindingResult bindingResult, Model model){
 
-
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(principal instanceof UserDetails){
+            String username = ((UserDetails) principal).getUsername();
+            newTask.setUser(userService.getUserByUsername(username).get());
+        }
 
         log.info("new Task: ={} ",newTask);
 
         if(bindingResult.hasErrors()){
-
             return "redirect:/TodoList/addTask";
         }
 
@@ -114,11 +129,6 @@ public class TaskController{
         return "redirect:/TodoList";
 
     }
-
-
-
-
-
     /*
 
         Complete tasks
@@ -130,10 +140,15 @@ public class TaskController{
 
     List<Task> taskList = taskService.getAllTasks().stream()
             .filter(task -> task.isDone()==true)
+            .filter(username -> username.getUser().getUsername().equals(userUsername()))
             .collect(Collectors.toList());
 
         model.addAttribute("doneTask",taskList);
-        model.addAttribute("types",taskTypeService.getAllTypeTask());
+        model.addAttribute("types",taskTypeService.getAllTypeTask()
+                .stream()
+                .filter(username -> username.getUser().getUsername().equals(userUsername()))
+                .collect(Collectors.toList())
+        );
 
         return "completeListTask";
 
@@ -153,6 +168,9 @@ public class TaskController{
     @PostMapping("/new_type")
     public String postNewType(@ModelAttribute("type") TaskType taskType){
 
+            taskType.setUser(userService.getUserByUsername(userUsername()).get());
+
+        log.info("task add: {}",taskType);
       taskTypeService.addTypeTask(taskType);
 
         return "redirect:/TodoList" ;
@@ -174,12 +192,17 @@ public class TaskController{
 
         List<Task> listTaskCategory = taskService.getAllTasks()
                 .stream()
+                .filter(username -> username.getUser().getUsername().equals(userUsername()))
                 .filter(task -> task.getTask_Type().getTypeTask().equals(type))
                 .filter(t -> t.isDone()==false)
                 .collect(Collectors.toList());
         log.info("List tasks other Category: {}",listTaskCategory);
         model.addAttribute("tasks",listTaskCategory);
-        model.addAttribute("types",taskTypeService.getAllTypeTask());
+        model.addAttribute("types",taskTypeService.getAllTypeTask()
+                .stream()
+                .filter(username -> username.getUser().getUsername().equals(userUsername()))
+                .collect(Collectors.toList())
+        );
 
 
         return "firstpage";
@@ -208,7 +231,12 @@ public class TaskController{
         @GetMapping("/category")
     public String getListCategory(Model model){
 
-            model.addAttribute("categories", taskTypeService.getAllTypeTask());
+            model.addAttribute("categories", taskTypeService.getAllTypeTask()
+            .stream()
+                    .filter(username -> username.getUser().getUsername().equals(userUsername()))
+                            .collect(Collectors.toList())
+            );
+
             return "category";
         }
         @DeleteMapping("category/{id}")
@@ -218,6 +246,15 @@ public class TaskController{
             return "redirect:/TodoList/category";
         }
 
+    // Return user Username who create task or category task
 
+        private String userUsername(){
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            if(principal instanceof UserDetails){
+                return  ((UserDetails) principal).getUsername();
+
+            }
+            return userUsername();
+        }
 
 }

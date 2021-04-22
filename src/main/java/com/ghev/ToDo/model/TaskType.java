@@ -2,6 +2,7 @@ package com.ghev.ToDo.model;
 
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Cascade;
@@ -26,6 +27,11 @@ public class TaskType {
 
     @Column(name = "TYPETASK")
     private String typeTask;
+
+    @NonNull
+    @ManyToOne
+    @JoinColumn(name = "id_user")
+    private User user;
 
 
     public TaskType() {
